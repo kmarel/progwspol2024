@@ -3,21 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
 		xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#FF202020">
-	<Window.DataContext>
-		<viewModel:Board/>
-	</Window.DataContext>
-	<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-		<Rectangle x:Name="Table" HorizontalAlignment="Center" Height="434" VerticalAlignment="Center" Width="800" Fill="#FF37893C"/>
-		<Rectangle x:Name="TopBound" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="800" Fill="#FF5E4626"/>
-		<Rectangle x:Name="BottomBound" HorizontalAlignment="Center" Height="20" Margin="0,414,0,0" VerticalAlignment="Bottom" Width="800" Fill="#FF5E4626"/>
-		<Rectangle x:Name="LeftBound" HorizontalAlignment="Left" Height="434" VerticalAlignment="Center" Width="21" Fill="#FF5E4626"/>
-		<Rectangle x:Name="RightBound" HorizontalAlignment="Right" Height="434" VerticalAlignment="Center" Width="21" Fill="#FF5E4626" Margin="779,0,0,0"/>
-		<TextBlock x:Name="AmountOfBallsText" HorizontalAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="91" Width="456" TextAlignment="Center" FontSize="48" FontWeight="Bold"><Run Text="Podaj liczbę"/><Run Language="pl-pl" Text=" kul"/></TextBlock>
-		<TextBox x:Name="AmountOfBallsTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="1" VerticalAlignment="Center" Width="414" Height="74" TextAlignment="Center" FontSize="48"/>
-		<Button x:Name="CreateBallsButton" Content="Wstaw" HorizontalAlignment="Center" Margin="0,297,0,0" Width="326" FontSize="36" FontWeight="Bold" Height="75" VerticalAlignment="Top" Command="{Binding }"/>
-	</Grid>
+    <Window.DataContext>
+        <viewModel:Board/>
+    </Window.DataContext>
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0*"/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <Canvas Margin="-336,-218,-338,-112" Grid.RowSpan="2" Background="#FF47902D">
+            <Border BorderBrush="#FF662F09" BorderThickness="10" Height="330" Width="795" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox Canvas.Left="248" TextWrapping="Wrap" Canvas.Top="375" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </Canvas>
+        <Button Content="Generuj" Grid.Row="1" Margin="125,136,-146,-169"/>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="-101,129,44,-165" Foreground="White"><Run Language="pl-pl" Text="Podaj ilość kul do wygenerowania"/><LineBreak/><Run Language="pl-pl"/></TextBlock>
+    </Grid>
 </Window>

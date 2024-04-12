@@ -15,6 +15,9 @@ namespace ViewModel
         public void Execute(object parameter)
         {
             Debug.WriteLine("Nacisnieto przycisk");
+            
         }
+
+        
     }
 }

@@ -2,22 +2,25 @@
 
 namespace Logic
 {
-    public class Ball
+    internal class Ball
     {
 
         private Vector2 position;
         private Vector2 velocity;
+        private int radius;
 
-        public Ball(Vector2 position, Vector2 velocity)
+        public Ball(Vector2 position, Vector2 velocity, int radius)
         {
             this.position = position;
             this.velocity = velocity;
+            this.radius = radius;
         }
 
-        public Ball(Vector2 position)
+        public Ball(Vector2 position, int radius)
         {
             this.position = position;
             velocity = new Vector2(0, 0);
+            this.radius = radius;
         }
 
         public Vector2 getPosition()
@@ -44,6 +47,6 @@ namespace Logic
         {
             position = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
         }
-        
+
     }
 }
