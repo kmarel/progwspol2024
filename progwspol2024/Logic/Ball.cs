@@ -2,7 +2,7 @@
 
 namespace Logic
 {
-    internal class Ball
+    public class Ball
     {
 
         private Vector2 position;
@@ -46,6 +46,11 @@ namespace Logic
         public void move()
         {
             position = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+        }
+
+        public int getRadius() 
+        {
+            return radius;
         }
 
     }

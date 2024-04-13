@@ -6,19 +6,39 @@
 		xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#FF202020">
-    <Window.DataContext>
-        <viewModel:Board/>
-    </Window.DataContext>
+	<Window.DataContext>
+		<viewModel:Manager/>
+	</Window.DataContext>
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
         <Canvas Margin="-336,-218,-338,-112" Grid.RowSpan="2" Background="#FF47902D">
-            <Border BorderBrush="#FF662F09" BorderThickness="10" Height="330" Width="795" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox Canvas.Left="248" TextWrapping="Wrap" Canvas.Top="375" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<Border BorderBrush="#FF662F09" BorderThickness="10" Height="330" Width="795" HorizontalAlignment="Left" VerticalAlignment="Center">
+				<ItemsControl ItemsSource="{Binding Balls}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Canvas />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Ellipse Width= "{Binding Radius}" Height="{Binding Radius}" Fill="Pink" />
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemContainerStyle>
+						<Style TargetType="ContentPresenter">
+							<Setter Property="Canvas.Top" Value="{Binding YRelativeToCanvas}" />
+							<Setter Property="Canvas.Left" Value="{Binding XRelativeToCanvas}" />
+						</Style>
+					</ItemsControl.ItemContainerStyle>
+				</ItemsControl>
+			</Border>
+			
+            <TextBox Canvas.Left="248" TextWrapping="Wrap" Canvas.Top="375" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding BallsAmountText}"/>
         </Canvas>
-        <Button Content="Generuj" Grid.Row="1" Margin="125,136,-146,-169"/>
+        <Button Content="Generuj" Grid.Row="1" Margin="125,136,-146,-169" Command="{Binding CreateBallsCommand}"/>
         <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="-101,129,44,-165" Foreground="White"><Run Language="pl-pl" Text="Podaj ilość kul do wygenerowania"/><LineBreak/><Run Language="pl-pl"/></TextBlock>
     </Grid>
 </Window>

@@ -13,7 +13,7 @@ namespace Logic
 
         public abstract void setHeight(int _height);
 
-        internal abstract List<Ball> getBalls();
+        public abstract List<Ball> getBalls();
 
         public abstract void addBallsToTable(int numberOfBalls);
 
@@ -25,5 +25,6 @@ namespace Logic
         {
             return new Table();
         }
+
     }
 }

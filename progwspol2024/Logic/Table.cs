@@ -1,4 +1,5 @@
 ﻿using Data;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace Logic
@@ -36,8 +37,8 @@ namespace Logic
             this.height = _height;
         }
 
-        internal override List<Ball> getBalls() 
-        { 
+        public override List<Ball> getBalls() 
+        {
             return balls;
         }
 
@@ -51,7 +52,7 @@ namespace Logic
                 do
                 {
                     position = new Vector2(random.Next(rad, this.width - rad), random.Next(rad, this.height - rad));
-                } while (isWithinTable(position));
+                } while (!isWithinTable(position));
                 Ball ball = new Ball(position, _data.radius);
                 randomizeSpeed(ball);
                 balls.Add(ball);
