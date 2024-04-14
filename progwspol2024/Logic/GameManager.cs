@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class GameManager
+    internal class GameManager : IGameManager
     {
         private bool isRunning;
         private LogicAPI table;
@@ -25,11 +25,11 @@ namespace Logic
             {
                 foreach (Ball ball in table.getBalls())
                 {
-                    if(ball.getPosition().X > 765 || ball.getPosition().X < 0)
+                    if(ball.getPosition().X > 755 || ball.getPosition().X < 0)
                     {
                         ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
                     }
-                    if(ball.getPosition().Y > 300 || ball.getPosition().Y < 0)
+                    if(ball.getPosition().Y > 290 || ball.getPosition().Y < 0)
                     {
                         ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
                     }

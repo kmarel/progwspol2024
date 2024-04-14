@@ -8,15 +8,15 @@ namespace Model
 {
     internal class Table : ModelAPI
     {
-        private Logic.GameManager gameManager;
+        private Logic.IGameManager gameManager;
         Logic.LogicAPI logicAPI;
 
-        private List<Ball> balls = new List<Ball>();
+        private List<IBall> balls = new List<IBall>();
 
         public Table()
         {
-            this.logicAPI = Logic.LogicAPI.createTableInstance();
-            gameManager = new Logic.GameManager(logicAPI);
+            logicAPI = Logic.LogicAPI.createTableInstance();
+            gameManager = Logic.LogicAPI.createGameManagerInstance(logicAPI);
         }  
 
         public override void startGame()
@@ -28,14 +28,14 @@ namespace Model
         {
             logicAPI.addBallsToTable(amount);
 
-            foreach(Logic.Ball ball in logicAPI.getBalls())
+            foreach(Logic.IBall ball in logicAPI.getBalls())
             {
                 balls.Add(new Ball(ball));
             }
 
         }
 
-        public override List<Ball> getBalls()
+        public override List<IBall> getBalls()
         {
             return balls;
         }

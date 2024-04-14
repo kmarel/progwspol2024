@@ -8,7 +8,7 @@ namespace Logic
     {
         private int width;
         private int height;
-        private List<Ball> balls = new List<Ball>();
+        private List<IBall> balls = new List<IBall>();
         private DataAPI _data = DataAPI.createInstance();
 
         public Table() 
@@ -37,7 +37,7 @@ namespace Logic
             this.height = _height;
         }
 
-        public override List<Ball> getBalls() 
+        public override List<IBall> getBalls() 
         {
             return balls;
         }
@@ -45,7 +45,7 @@ namespace Logic
         public override void addBallsToTable(int numberOfBalls)
         {
             Random random = new Random();
-            int rad = 30;
+            int rad = 100;
             Vector2 position;
             for (int i = 0; i < numberOfBalls; i++)
             {

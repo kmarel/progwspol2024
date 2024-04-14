@@ -24,7 +24,7 @@ namespace ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<Model.Ball> Balls { get; } = new ObservableCollection<Model.Ball>();
+        public ObservableCollection<Model.IBall> Balls { get; } = new ObservableCollection<Model.IBall>();
 
         public string BallsAmountText
         {
@@ -56,7 +56,7 @@ namespace ViewModel
         {
             modelAPI.createBalls(numberOfBallsToCreate);
             
-            foreach(Model.Ball ball in modelAPI.getBalls())
+            foreach(Model.IBall ball in modelAPI.getBalls())
             {
                 Balls.Add(ball);
             }

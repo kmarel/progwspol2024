@@ -1,8 +1,28 @@
 ﻿using Data;
+using System.ComponentModel;
 using System.Numerics;
 
 namespace Logic
 {
+
+    public interface IBall : IObservable<Vector2>
+    {
+
+        Vector2 getPosition();
+        void setPosition(Vector2 newPosition);
+        Vector2 getVelocity();
+        void setVelocity(Vector2 newVelocity);
+        void move();
+        int getRadius();
+
+    }
+
+    public interface IGameManager
+    {
+        void moveBalls();
+
+    }
+
     public abstract class LogicAPI
     {
         public abstract int getWidth();
@@ -13,7 +33,7 @@ namespace Logic
 
         public abstract void setHeight(int _height);
 
-        public abstract List<Ball> getBalls();
+        public abstract List<IBall> getBalls();
 
         public abstract void addBallsToTable(int numberOfBalls);
 
@@ -24,6 +44,11 @@ namespace Logic
         public static LogicAPI createTableInstance()
         {
             return new Table();
+        }
+
+        public static IGameManager createGameManagerInstance(LogicAPI table) 
+        {
+            return new GameManager(table);
         }
 
     }

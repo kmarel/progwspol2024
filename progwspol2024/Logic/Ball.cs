@@ -2,7 +2,7 @@
 
 namespace Logic
 {
-    public class Ball : IObservable<Vector2>
+    internal class Ball : IBall
     {
 
         private Vector2 position;
@@ -62,7 +62,24 @@ namespace Logic
         {
             if (!observers.Contains(observer))
                 observers.Add(observer);
-            return null;
+            return new Unsubscriber(observers, observer);
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            private List<IObserver<Vector2>> _observers;
+            private IObserver<Vector2> _observer;
+
+            public Unsubscriber(List<IObserver<Vector2>> observers, IObserver<Vector2> observer)
+            {
+                _observers = observers;
+                _observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (!(_observer == null)) _observers.Remove(_observer);
+            }
         }
     }
 }

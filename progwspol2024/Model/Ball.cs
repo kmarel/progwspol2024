@@ -5,14 +5,14 @@ using System.Windows.Shapes;
 
 namespace Model
 {
-    public class Ball : INotifyPropertyChanged, IObserver<Vector2>
+    internal class Ball : IBall
     {
 
-        private Logic.Ball ballLogic;
+        private Logic.IBall ballLogic;
 
-        public int Radius
+        public int Diameter
         {
-            get { return ballLogic.getRadius(); }
+            get { return ballLogic.getRadius() * 2; }
         }
 
         public float XRelativeToCanvas
@@ -35,7 +35,7 @@ namespace Model
             }
         }
 
-        public Ball(Logic.Ball ballLogic) 
+        public Ball(Logic.IBall ballLogic) 
         {
             this.ballLogic = ballLogic;
             ballLogic.Subscribe(this);
@@ -53,12 +53,12 @@ namespace Model
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnNext(Vector2 value)
