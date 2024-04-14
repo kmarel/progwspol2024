@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Documents;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Model
 {
     internal class Table : ModelAPI
     {
-
+        private Logic.GameManager gameManager;
         Logic.LogicAPI logicAPI;
 
         private List<Ball> balls = new List<Ball>();
@@ -13,9 +16,13 @@ namespace Model
         public Table()
         {
             this.logicAPI = Logic.LogicAPI.createTableInstance();
-        }
+            gameManager = new Logic.GameManager(logicAPI);
+        }  
 
-        
+        public override void startGame()
+        {
+            Task.Run(gameManager.moveBalls);
+        }
 
         public override void createBalls(int amount)
         {

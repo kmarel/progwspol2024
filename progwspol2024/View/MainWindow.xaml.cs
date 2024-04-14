@@ -21,7 +21,7 @@ namespace View
 
         public MainWindow()
         {
-            
+            InitializeComponent();   
         }
     }
 }

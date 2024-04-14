@@ -37,6 +37,7 @@ namespace ViewModel
         }
 
         public CustomCommand CreateBallsCommand => new CustomCommand(execute => createBalls());
+        public CustomCommand StartGameCommand => new CustomCommand(execute => startGame());
 
         public Manager()
         {
@@ -44,6 +45,11 @@ namespace ViewModel
 
             boardWidth = modelAPI.getBoardWidth();
             boardHeight = modelAPI.getBoardHeight();
+        }
+
+        private void startGame()
+        {
+            modelAPI.startGame();
         }
 
         private void createBalls()

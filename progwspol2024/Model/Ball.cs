@@ -5,7 +5,7 @@ using System.Windows.Shapes;
 
 namespace Model
 {
-    public class Ball : INotifyPropertyChanged
+    public class Ball : INotifyPropertyChanged, IObserver<Vector2>
     {
 
         private Logic.Ball ballLogic;
@@ -20,7 +20,7 @@ namespace Model
             get { return ballLogic.getPosition().X; }
             set
             {
-                ballLogic.setPosition(new Vector2(value ,ballLogic.getPosition().Y));
+                ballLogic.setPosition(new Vector2(value, ballLogic.getPosition().Y));
                 OnPropertyChanged();
             }
         }
@@ -38,6 +38,7 @@ namespace Model
         public Ball(Logic.Ball ballLogic) 
         {
             this.ballLogic = ballLogic;
+            ballLogic.Subscribe(this);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -50,6 +51,21 @@ namespace Model
             }
         }
 
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(Vector2 value)
+        {
+            XRelativeToCanvas = value.X;
+            YRelativeToCanvas = value.Y;
+        }
     }
 
 }

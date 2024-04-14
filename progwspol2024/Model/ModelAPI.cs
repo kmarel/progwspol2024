@@ -8,6 +8,8 @@
             return new Table();
         }
 
+        public abstract void startGame();
+
         public abstract void createBalls(int amount);
 
         public abstract List<Ball> getBalls();

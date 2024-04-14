@@ -45,7 +45,7 @@ namespace Logic
         public override void addBallsToTable(int numberOfBalls)
         {
             Random random = new Random();
-            int rad = 10;
+            int rad = 30;
             Vector2 position;
             for (int i = 0; i < numberOfBalls; i++)
             {

@@ -2,12 +2,13 @@
 
 namespace Logic
 {
-    public class Ball
+    public class Ball : IObservable<Vector2>
     {
 
         private Vector2 position;
         private Vector2 velocity;
         private int radius;
+        private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
 
         public Ball(Vector2 position, Vector2 velocity, int radius)
         {
@@ -46,6 +47,10 @@ namespace Logic
         public void move()
         {
             position = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            foreach(var observer in observers) 
+            {
+                observer.OnNext(position);
+            }
         }
 
         public int getRadius() 
@@ -53,5 +58,11 @@ namespace Logic
             return radius;
         }
 
+        public IDisposable Subscribe(IObserver<Vector2> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return null;
+        }
     }
 }

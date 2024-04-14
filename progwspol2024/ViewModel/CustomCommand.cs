@@ -10,7 +10,7 @@ namespace ViewModel
     public class CustomCommand : ICommand
     {
 
-        private Action<object> execute;
+        private Action<object?> execute;
 
 
         public event EventHandler? CanExecuteChanged;
@@ -25,7 +25,7 @@ namespace ViewModel
             execute(parameter);
         }
 
-        public CustomCommand(Action<object> execute)
+        public CustomCommand(Action<object?> execute)
         {
             this.execute = execute;
         }
