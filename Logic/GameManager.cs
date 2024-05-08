@@ -33,7 +33,7 @@ namespace Logic
                     {
                         ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
                     }
-                    ball.move();
+                    //ball.move();
                     
                 }
                 Thread.Sleep(16);

@@ -5,14 +5,17 @@ using System.Numerics;
 namespace Logic
 {
 
-    public interface IBall : IObservable<Vector2>
+    public interface IBall : IObservable<Vector2>, IObserver<Vector2>
     {
 
         Vector2 getPosition();
-        void setPosition(Vector2 newPosition);
-        Vector2 getVelocity();
+
         void setVelocity(Vector2 newVelocity);
-        void move();
+
+        Vector2 getVelocity();
+
+        void setPosition(Vector2 newPosition);
+
         int getRadius();
 
     }

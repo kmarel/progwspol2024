@@ -15,7 +15,7 @@
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
         <Canvas Margin="-336,-218,-338,-112" Grid.RowSpan="2" Background="#FF47902D">
-            <Border BorderBrush="#FF662F09" BorderThickness="10" Height="330" Width="795" HorizontalAlignment="Left" VerticalAlignment="Center">
+			<Border BorderBrush="#FF662F09" BorderThickness="10" Height="{Binding BoardHeight}" Width="{Binding BoardWidth}" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <ItemsControl ItemsSource="{Binding Balls}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

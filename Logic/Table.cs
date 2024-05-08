@@ -11,10 +11,14 @@ namespace Logic
         private List<IBall> balls = new List<IBall>();
         private DataAPI _data = DataAPI.createInstance();
 
+        private bool isPhysicsEnabled = false;
+
         public Table() 
         {
             this.width = _data.width;
             this.height = _data.height;
+
+            Task.Run(() => handlePhysics());
         }
 
         public override int getWidth()
@@ -53,10 +57,11 @@ namespace Logic
                 {
                     position = new Vector2(random.Next(rad, this.width - rad), random.Next(rad, this.height - rad));
                 } while (!isWithinTable(position));
-                Ball ball = new Ball(position, _data.radius);
+                Ball ball = new Ball(DataAPI.createBall(position, 10, 10));
                 randomizeSpeed(ball);
                 balls.Add(ball);
             }
+            isPhysicsEnabled = true;
         }
 
         internal override void randomizeSpeed(Ball ball)
@@ -72,5 +77,44 @@ namespace Logic
             else
                 return false;
         }
+
+        private void handlePhysics()
+        {
+            while(true)
+            {
+                if(!isPhysicsEnabled)
+                {
+                    continue;
+                }
+                foreach (Ball ball in balls)
+                {
+
+                    if (ball.getPosition().X > width - ball.getRadius())
+                    {
+                        ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
+                        ball.setPosition(new Vector2(width - ball.getRadius(), ball.getPosition().Y));
+                    }
+
+                    if (ball.getPosition().X < 0 + ball.getRadius())
+                    {
+                        ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
+                        ball.setPosition(new Vector2(0 + ball.getRadius(), ball.getPosition().Y));
+                    }
+
+                    if (ball.getPosition().Y > height - ball.getRadius())
+                    {
+                        ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
+                        ball.setPosition(new Vector2(ball.getPosition().X, height - ball.getRadius()));
+                    }
+
+                    if (ball.getPosition().Y < 0 + ball.getRadius())
+                    {
+                        ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
+                        ball.setPosition(new Vector2(ball.getPosition().X, 0 + ball.getRadius()));
+                    }
+                }
+            }
+        }
+
     }
 }

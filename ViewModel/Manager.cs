@@ -22,6 +22,16 @@ namespace ViewModel
         public int boardWidth;
         public int boardHeight;
 
+        public int BoardWidth
+        {
+            get { return boardWidth; }
+        }
+
+        public int BoardHeight
+        {
+            get { return boardHeight; }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<Model.IBall> Balls { get; } = new ObservableCollection<Model.IBall>();

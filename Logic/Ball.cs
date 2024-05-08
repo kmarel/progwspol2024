@@ -1,61 +1,43 @@
 ﻿using System.Numerics;
 
+
 namespace Logic
 {
     internal class Ball : IBall
     {
 
-        private Vector2 position;
-        private Vector2 velocity;
-        private int radius;
         private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
+        private Data.IBall ballData;
 
-        public Ball(Vector2 position, Vector2 velocity, int radius)
+        public Ball(Data.IBall ballData)
         {
-            this.position = position;
-            this.velocity = velocity;
-            this.radius = radius;
-        }
-
-        public Ball(Vector2 position, int radius)
-        {
-            this.position = position;
-            velocity = new Vector2(0, 0);
-            this.radius = radius;
+            this.ballData = ballData;
+            ballData.Subscribe(this);
         }
 
         public Vector2 getPosition()
         {
-            return position;
-        }
-
-        public void setPosition(Vector2 newPosition)
-        {
-            position = newPosition;
-        }
-
-        public Vector2 getVelocity()
-        {
-            return velocity;
+            return ballData.getPosition();
         }
 
         public void setVelocity(Vector2 newVelocity)
         {
-            velocity = newVelocity;
+            ballData.setVelocity(newVelocity);
         }
 
-        public void move()
+        public void setPosition(Vector2 newPosition)
         {
-            position = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-            foreach(var observer in observers) 
-            {
-                observer.OnNext(position);
-            }
+            ballData.setPosition(newPosition);
         }
 
-        public int getRadius() 
+        public Vector2 getVelocity()
         {
-            return radius;
+            return ballData.getVelocity();
+        }
+
+        public int getRadius()
+        {
+            return ballData.getRadius();
         }
 
         public IDisposable Subscribe(IObserver<Vector2> observer)
@@ -81,5 +63,24 @@ namespace Logic
                 if (!(_observer == null)) _observers.Remove(_observer);
             }
         }
+
+        public void OnCompleted()
+        {
+
+        }
+
+        public void OnError(Exception error)
+        {
+
+        }
+
+        public void OnNext(Vector2 value)
+        {
+            foreach (var observer in observers)
+            {
+                observer.OnNext(value);
+            }
+        }
+
     }
 }

@@ -26,6 +26,7 @@ namespace Model
 
         public override void createBalls(int amount)
         {
+
             logicAPI.addBallsToTable(amount);
 
             foreach(Logic.IBall ball in logicAPI.getBalls())
