@@ -40,6 +40,16 @@ namespace Logic
             return ballData.getRadius();
         }
 
+        public int getWeight()
+        {
+            return ballData.getWeight();
+        }
+
+        public void setWeight(int newWeight)
+        {
+            ballData.setWeight(newWeight);
+        }
+
         public IDisposable Subscribe(IObserver<Vector2> observer)
         {
             if (!observers.Contains(observer))

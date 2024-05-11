@@ -22,7 +22,8 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(() => move());
+            Task.Run(async () => await move());
+
         }
 
         public Ball(Vector2 position, int radius, int weight)
@@ -32,7 +33,7 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(() => move());
+            Task.Run(async () => await move());
         }
 
         public Vector2 getPosition()
@@ -47,6 +48,7 @@ namespace Data
                 position = newPosition;
             }
         }
+
         public Vector2 getVelocity()
         {
             return velocity;
@@ -62,7 +64,17 @@ namespace Data
             return radius;
         }
 
-        private void move()
+        public int getWeight()
+        {
+            return weight;
+        }
+
+        public void setWeight(int newWeight)
+        {
+            weight = newWeight;
+        }
+
+        private async Task move()
         {
             while(true)
             {
@@ -72,7 +84,7 @@ namespace Data
                 {
                     observer.OnNext(position);
                 }
-                Thread.Sleep(16);
+                await Task.Delay(16);
             }
         }
 
