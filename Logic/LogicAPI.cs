@@ -18,6 +18,8 @@ namespace Logic
 
         int getRadius();
 
+        object getLock();
+
     }
 
     public interface IGameManager

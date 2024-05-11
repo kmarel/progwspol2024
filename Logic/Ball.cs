@@ -92,5 +92,9 @@ namespace Logic
             }
         }
 
+        public object getLock()
+        {
+            return ballData.getLock();
+        }
     }
 }

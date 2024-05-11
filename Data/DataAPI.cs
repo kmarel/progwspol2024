@@ -12,6 +12,7 @@ namespace Data
         int getRadius();
         int getWeight();
         void setWeight(int newWeight);
+        object getLock();
 
     }
     public abstract class DataAPI

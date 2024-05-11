@@ -18,7 +18,7 @@ namespace Logic
             this.width = _data.width;
             this.height = _data.height;
 
-            Task.Run(async () => await handlePhysics());
+            handlePhysics();
         }
 
         public override int getWidth()
@@ -98,47 +98,57 @@ namespace Logic
                 return false;
         }
 
-        private async Task handlePhysics()
+        private void handlePhysics()
         {
-            while(true)
-            {
-                if(!isPhysicsEnabled)
-                {
-                    continue;
-                }
-
-                await Task.Run(() => handleCollisionsWithBalls());
-                await Task.Run(() => handleCollisionsWithWalls());
- 
-            }
+            Task.Run(() => handleCollisionsWithBalls());
+            Task.Run(() => handleCollisionsWithWalls());
         }
 
         private void handleCollisionsWithWalls()
         {
-            foreach (Ball ball in balls)
+            while(true)
             {
-                if (ball.getPosition().X > width - ball.getRadius() - 20)
+                if (!isPhysicsEnabled)
                 {
-                    ball.setPosition(new Vector2(width - ball.getRadius() - 20, ball.getPosition().Y));
-                    ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
+                    continue;
                 }
-
-                if (ball.getPosition().X < 0 + ball.getRadius())
+                foreach (Ball ball in balls)
                 {
-                    ball.setPosition(new Vector2(0 + ball.getRadius(), ball.getPosition().Y));
-                    ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
-                }
+                    if (ball.getPosition().X > width - ball.getRadius() - 20)
+                    {
+                        lock(ball.getLock())
+                        {
+                            ball.setPosition(new Vector2(width - ball.getRadius() - 20, ball.getPosition().Y));
+                            ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
+                        }
+                    }
 
-                if (ball.getPosition().Y > height - ball.getRadius() - 20)
-                {
-                    ball.setPosition(new Vector2(ball.getPosition().X, height - ball.getRadius() - 20));
-                    ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
-                }
+                    if (ball.getPosition().X < 0 + ball.getRadius())
+                    {
+                        lock (ball.getLock())
+                        {
+                            ball.setPosition(new Vector2(0 + ball.getRadius(), ball.getPosition().Y));
+                            ball.setVelocity(new Vector2(ball.getVelocity().X * (-1), ball.getVelocity().Y));
+                        }
+                    }
 
-                if (ball.getPosition().Y < 0 + ball.getRadius())
-                {
-                    ball.setPosition(new Vector2(ball.getPosition().X, 0 + ball.getRadius()));
-                    ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
+                    if (ball.getPosition().Y > height - ball.getRadius() - 20)
+                    {
+                        lock(ball.getLock())
+                        {
+                            ball.setPosition(new Vector2(ball.getPosition().X, height - ball.getRadius() - 20));
+                            ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
+                        }
+                    }
+
+                    if (ball.getPosition().Y < 0 + ball.getRadius())
+                    {
+                        lock(ball.getLock())
+                        {
+                            ball.setPosition(new Vector2(ball.getPosition().X, 0 + ball.getRadius()));
+                            ball.setVelocity(new Vector2(ball.getVelocity().X, ball.getVelocity().Y * (-1)));
+                        }
+                    }
                 }
             }
         }
@@ -147,19 +157,13 @@ namespace Logic
         {
             foreach (Ball ball1 in balls)
             {
-                lock (ball1)
+                foreach (Ball ball2 in balls)
                 {
-                    foreach (Ball ball2 in balls)
+                    if (ball1 == ball2) { continue; }
+                    var distance = Vector2.Distance(ball1.getPosition(), ball2.getPosition());
+                    if (distance <= ball1.getRadius() * 2)
                     {
-                        lock (ball2)
-                        {
-                            if (ball1 == ball2) { continue; }
-                            var distance = Vector2.Distance(ball1.getPosition(), ball2.getPosition());
-                            if (distance <= ball1.getRadius() * 2)
-                            {
-                                return new Tuple<Ball, Ball>(ball1, ball2);
-                            }
-                        }
+                        return new Tuple<Ball, Ball>(ball1, ball2);
                     }
                 }
             }
@@ -168,24 +172,38 @@ namespace Logic
 
         private void handleCollisionsWithBalls()
         {
-            Tuple<Ball, Ball>? collision = whichBallsCollide();
-            if (collision != null)
+            while(true)
             {
-                Ball ball1 = collision.Item1;
-                Ball ball2 = collision.Item2;
+                if (!isPhysicsEnabled)
+                {
+                    continue;
+                }
+                Tuple<Ball, Ball>? collision = whichBallsCollide();
+                if (collision != null)
+                {
+                    Ball ball1 = collision.Item1;
+                    Ball ball2 = collision.Item2;
 
-                Vector2 relativeVelocity = ball1.getVelocity() - ball2.getVelocity();
-                Vector2 unitNormal = Vector2.Normalize(ball1.getPosition() - ball2.getPosition());
-                float dotProduct = Vector2.Dot(relativeVelocity, unitNormal);
-                Vector2 impulse = dotProduct * unitNormal * (2 * ball1.getWeight() * ball2.getWeight() / (ball1.getWeight() + ball2.getWeight()));
+                    Vector2 relativeVelocity = ball1.getVelocity() - ball2.getVelocity();
+                    Vector2 unitNormal = Vector2.Normalize(ball1.getPosition() - ball2.getPosition());
+                    float dotProduct = Vector2.Dot(relativeVelocity, unitNormal);
+                    Vector2 impulse = dotProduct * unitNormal * (2 * ball1.getWeight() * ball2.getWeight() / (ball1.getWeight() + ball2.getWeight()));
 
-                
+                    Vector2 previousVelocityBall1 = new Vector2(ball1.getVelocity().X, ball1.getVelocity().Y);
+                    Vector2 previousVelocityBall2 = new Vector2(ball2.getVelocity().X, ball2.getVelocity().Y);
 
-                ball1.setVelocity(ball1.getVelocity() - impulse / ball1.getWeight());
-                ball2.setVelocity(ball2.getVelocity() + impulse / ball2.getWeight());
+                    lock(ball1.getLock())
+                    {
+                        lock(ball2.getLock()) 
+                        {
+                            ball1.setVelocity(ball1.getVelocity() - impulse / ball1.getWeight());
+                            ball2.setVelocity(ball2.getVelocity() + impulse / ball2.getWeight());
 
-                //ball1.setPosition(ball1.getVelocity() + ball1.getPosition());
-                //ball2.setPosition(ball2.getVelocity() + ball2.getPosition());
+                            ball1.setPosition(-previousVelocityBall1 + ball1.getPosition());
+                            ball2.setPosition(-previousVelocityBall2 + ball2.getPosition());
+                        }
+                    }
+                }
             }
         }
 
