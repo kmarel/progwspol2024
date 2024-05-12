@@ -56,7 +56,7 @@ namespace Logic
             return balls;
         }
         
-        public override bool isOnOtherBall(Vector2 position)
+        private bool isOnOtherBall(Vector2 position)
         {
             foreach (Ball ball in balls)
             {
@@ -88,19 +88,19 @@ namespace Logic
             isPhysicsEnabled = true;
         }
 
-        internal override void randomizeSpeed(Ball ball)
+        private void randomizeSpeed(Ball ball)
         {
             Random random = new Random();
             ball.setVelocity(new Vector2((float)random.NextDouble() * 6 - 3, (float)random.NextDouble() * 6 - 3));
         }
 
-        internal override void randomizeMass(Ball ball)
+        private void randomizeMass(Ball ball)
         {
             Random random = new Random();
             ball.setWeight((int)random.NextDouble() * 10 - 5);
         }
 
-        public override bool isWithinTable(Vector2 position)
+        private bool isWithinTable(Vector2 position)
         {
             if(position.X >= 0 && position.X <= width && position.Y >= 0 && position.Y <= height)
                 return true;

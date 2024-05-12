@@ -42,14 +42,6 @@ namespace Logic
 
         public abstract void addBallsToTable(int numberOfBalls);
 
-        internal abstract void randomizeSpeed(Ball ball);
-
-        internal abstract void randomizeMass(Ball ball);
-
-        public abstract bool isWithinTable(Vector2 position);
-
-        public abstract bool isOnOtherBall(Vector2 position);
-
         public static LogicAPI createTableInstance()
         {
             return new Table();
