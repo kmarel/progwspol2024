@@ -23,7 +23,7 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(async () => await move());
+            Task.Run(() => move());
 
         }
 
@@ -34,7 +34,7 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(async () => await move());
+            Task.Run(() => move());
         }
 
         public Vector2 getPosition()
@@ -72,7 +72,7 @@ namespace Data
             weight = newWeight;
         }
 
-        private async Task move()
+        private void move()
         {
             while(true)
             {
@@ -85,7 +85,7 @@ namespace Data
                         observer.OnNext(position);
                     }
                 }
-                await Task.Delay(16);
+                Thread.Sleep(16);
             }
         }
 

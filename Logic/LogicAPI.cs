@@ -55,9 +55,9 @@ namespace Logic
             return new Table();
         }
 
-        public static IGameManager createGameManagerInstance(LogicAPI table) 
+        public static LogicAPI createTableInstance(DataAPI dataAPI)
         {
-            return new GameManager(table);
+            return new Table(dataAPI);
         }
 
     }

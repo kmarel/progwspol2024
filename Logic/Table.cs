@@ -1,6 +1,7 @@
 ﻿using Data;
 using System.Diagnostics;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Logic
 {
@@ -13,7 +14,16 @@ namespace Logic
 
         private bool isPhysicsEnabled = false;
 
-        public Table() 
+        public Table(DataAPI dataAPI) 
+        {
+            _data = dataAPI;
+            this.width = _data.width;
+            this.height = _data.height;
+
+            handlePhysics();
+        }
+
+        public Table()
         {
             this.width = _data.width;
             this.height = _data.height;

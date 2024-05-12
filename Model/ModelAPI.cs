@@ -20,12 +20,8 @@ namespace Model
             return new Table();
         }
 
-        public abstract void startGame();
-
         public abstract void createBalls(int amount);
-
         public abstract List<IBall> getBalls();
-
         public abstract int getBoardWidth();
         public abstract int getBoardHeight();
 

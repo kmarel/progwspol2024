@@ -8,7 +8,6 @@ namespace Model
 {
     internal class Table : ModelAPI
     {
-        private Logic.IGameManager gameManager;
         Logic.LogicAPI logicAPI;
 
         private List<IBall> balls = new List<IBall>();
@@ -16,13 +15,7 @@ namespace Model
         public Table()
         {
             logicAPI = Logic.LogicAPI.createTableInstance();
-            gameManager = Logic.LogicAPI.createGameManagerInstance(logicAPI);
         }  
-
-        public override void startGame()
-        {
-            Task.Run(gameManager.moveBalls);
-        }
 
         public override void createBalls(int amount)
         {
