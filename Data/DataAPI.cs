@@ -7,12 +7,9 @@ namespace Data
 
         Vector2 getPosition();
         Vector2 getVelocity();
-        void setPosition(Vector2 newPosition);
         void setVelocity(Vector2 newVelocity);
-        int getRadius();
         int getWeight();
         void setWeight(int newWeight);
-        object getLock();
 
     }
     public abstract class DataAPI

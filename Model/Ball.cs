@@ -20,7 +20,6 @@ namespace Model
             get { return ballLogic.getPosition().X; }
             set
             {
-                ballLogic.setPosition(new Vector2(value, ballLogic.getPosition().Y));
                 OnPropertyChanged();
             }
         }
@@ -30,7 +29,6 @@ namespace Model
             get { return ballLogic.getPosition().Y; }
             set
             {
-                ballLogic.setPosition(new Vector2(ballLogic.getPosition().X, value));
                 OnPropertyChanged();
             }
         }

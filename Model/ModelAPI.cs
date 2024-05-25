@@ -8,8 +8,8 @@ namespace Model
     public interface IBall : INotifyPropertyChanged, IObserver<Vector2>
     {
         int Diameter { get; }
-        float XRelativeToCanvas { get; set; }
-        float YRelativeToCanvas { get; set; }
+        float XRelativeToCanvas { get; }
+        float YRelativeToCanvas { get; }
 
     }
     public abstract class ModelAPI

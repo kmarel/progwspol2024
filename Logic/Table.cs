@@ -20,7 +20,7 @@ namespace Logic
             this.width = _data.width;
             this.height = _data.height;
 
-            handlePhysics();
+            //handlePhysics();
         }
 
         public Table()
@@ -28,7 +28,7 @@ namespace Logic
             this.width = _data.width;
             this.height = _data.height;
 
-            handlePhysics();
+            //handlePhysics();
         }
 
         public override int getWidth()
@@ -60,7 +60,7 @@ namespace Logic
         {
             foreach (Ball ball in balls)
             {
-                if (Vector2.Distance(ball.getPosition(), position) <= 2 * ball.getRadius())
+                if (Vector2.Distance(ball.getPosition(), position) <= 2 * _data.radius)
                 {
                     return true;
                 }
@@ -80,7 +80,7 @@ namespace Logic
                     position = new Vector2(random.Next(rad, this.width - rad), random.Next(rad, this.height - rad));
                     
                 } while (!isWithinTable(position) && !isOnOtherBall(position));
-                Ball ball = new Ball(DataAPI.createBall(position, 10, 10));
+                Ball ball = new Ball(DataAPI.createBall(position, 10, 10), balls);
                 randomizeSpeed(ball);
                 randomizeMass(ball);
                 balls.Add(ball);
@@ -116,7 +116,7 @@ namespace Logic
 
         private void handleCollisionsWithWalls()
         {
-            while(true)
+            /*while(true)
             {
                 if (!isPhysicsEnabled)
                 {
@@ -161,9 +161,10 @@ namespace Logic
                     }
                 }
             }
+            */
         }
 
-        private Tuple<Ball, Ball>? whichBallsCollide()
+        /*private Tuple<Ball, Ball>? whichBallsCollide()
         {
             foreach (Ball ball1 in balls)
             {
@@ -178,10 +179,11 @@ namespace Logic
                 }
             }
             return null;
-        }
+        }*/
 
         private void handleCollisionsWithBalls()
         {
+            /*
             while(true)
             {
                 if (!isPhysicsEnabled)
@@ -215,6 +217,7 @@ namespace Logic
                     }
                 }
             }
+            */
         }
 
     }

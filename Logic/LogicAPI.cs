@@ -14,11 +14,7 @@ namespace Logic
 
         Vector2 getVelocity();
 
-        void setPosition(Vector2 newPosition);
-
         int getRadius();
-
-        object getLock();
 
     }
 

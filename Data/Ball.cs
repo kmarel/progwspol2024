@@ -14,7 +14,6 @@ namespace Data
         private int radius;
         private int weight;
         private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
-        private object movementLock = new object();
 
         public Ball(Vector2 position, Vector2 velocity, int radius, int weight)
         {
@@ -39,10 +38,13 @@ namespace Data
 
         public Vector2 getPosition()
         {
-            return position;
+            //lock(this)
+            //{
+                return position;
+            //}
         }
 
-        public void setPosition(Vector2 newPosition)
+        private void setPosition(Vector2 newPosition)
         {
             position = newPosition;
         }
@@ -55,11 +57,6 @@ namespace Data
         public void setVelocity(Vector2 newVelocity)
         {
             velocity = newVelocity;
-        }
-
-        public int getRadius()
-        {
-            return radius;
         }
 
         public int getWeight()
@@ -76,16 +73,16 @@ namespace Data
         {
             while(true)
             {
-                lock(movementLock)
-                {
+                //lock(this)
+                //{
                     Vector2 newPosition = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
                     setPosition(newPosition);
                     foreach (var observer in observers)
                     {
                         observer.OnNext(position);
                     }
-                }
-                Thread.Sleep(16);
+                    Thread.Sleep(16);
+                //}
             }
         }
 
@@ -94,11 +91,6 @@ namespace Data
             if (!observers.Contains(observer))
                 observers.Add(observer);
             return new Unsubscriber(observers, observer);
-        }
-
-        public object getLock()
-        {
-            return movementLock;
         }
 
         private class Unsubscriber : IDisposable
