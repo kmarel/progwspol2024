@@ -13,6 +13,8 @@ namespace LogicTest
             public override int height => 300;
 
             public override int width => 500;
+
+            public override int weight => 3;
         }
 
         [TestMethod]

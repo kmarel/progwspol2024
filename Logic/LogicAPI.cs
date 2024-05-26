@@ -18,12 +18,6 @@ namespace Logic
 
     }
 
-    public interface IGameManager
-    {
-        void moveBalls();
-
-    }
-
     public abstract class LogicAPI
     {
         public abstract int getWidth();

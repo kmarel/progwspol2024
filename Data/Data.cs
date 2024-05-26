@@ -5,5 +5,6 @@
         public override int radius => 10;
         public override int height => 330;
         public override int width => 795;
+        public override int weight => 5;
     }
 }

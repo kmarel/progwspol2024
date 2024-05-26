@@ -14,6 +14,7 @@ namespace Data
         private int radius;
         private int weight;
         private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
+        private Thread thread;
 
         public Ball(Vector2 position, Vector2 velocity, int radius, int weight)
         {
@@ -22,8 +23,9 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(() => move());
-
+            this.thread = new Thread(move);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public Ball(Vector2 position, int radius, int weight)
@@ -33,15 +35,17 @@ namespace Data
             this.radius = radius;
             this.weight = weight;
 
-            Task.Run(() => move());
+            this.thread = new Thread(move);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public Vector2 getPosition()
         {
-            //lock(this)
-            //{
+            lock (this)
+            {
                 return position;
-            //}
+            }
         }
 
         private void setPosition(Vector2 newPosition)
@@ -59,30 +63,17 @@ namespace Data
             velocity = newVelocity;
         }
 
-        public int getWeight()
-        {
-            return weight;
-        }
-
-        public void setWeight(int newWeight)
-        {
-            weight = newWeight;
-        }
-
         private void move()
         {
             while(true)
-            {
-                //lock(this)
-                //{
-                    Vector2 newPosition = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                    setPosition(newPosition);
-                    foreach (var observer in observers)
-                    {
-                        observer.OnNext(position);
-                    }
-                    Thread.Sleep(16);
-                //}
+            {   
+                Vector2 newPosition = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                setPosition(newPosition);
+                foreach (IObserver<Vector2> observer in observers)
+                {
+                    observer.OnNext(position);
+                }
+                Thread.Sleep(16);   
             }
         }
 

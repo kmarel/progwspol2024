@@ -4,19 +4,16 @@ namespace Data
 {
     public interface IBall : IObservable<Vector2>
     {
-
         Vector2 getPosition();
         Vector2 getVelocity();
         void setVelocity(Vector2 newVelocity);
-        int getWeight();
-        void setWeight(int newWeight);
-
     }
     public abstract class DataAPI
     {
         public abstract int radius { get; }
         public abstract int height { get; }
         public abstract int width { get; }
+        public abstract int weight { get; }
 
         public static DataAPI createInstance()
         {
