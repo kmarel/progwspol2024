@@ -7,6 +7,7 @@ namespace Data
         Vector2 getPosition();
         Vector2 getVelocity();
         void setVelocity(Vector2 newVelocity);
+        float getElapsedTimeInSeconds();
     }
     public abstract class DataAPI
     {

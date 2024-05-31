@@ -70,35 +70,41 @@ namespace Logic
 
 		private void handleCollisionsWithWalls()
 		{
-			if (getPosition().X + getVelocity().X > _data.width - _data.radius - 20)
+			if (getPosition().X + getVelocity().X * ballData.getElapsedTimeInSeconds() > _data.width - _data.radius - 20)
 			{
 				setVelocity(new Vector2(getVelocity().X * (-1), getVelocity().Y));
 			}
 
-			if (getPosition().X + getVelocity().X < 0 + _data.radius)
+			if (getPosition().X + getVelocity().X * ballData.getElapsedTimeInSeconds() < 0 + _data.radius)
 			{
 				setVelocity(new Vector2(getVelocity().X * (-1), getVelocity().Y));
 			}
 
-			if (getPosition().Y + getVelocity().Y > _data.height - _data.radius - 20)
+			if (getPosition().Y + getVelocity().Y * ballData.getElapsedTimeInSeconds() > _data.height - _data.radius - 20)
 			{
 				setVelocity(new Vector2(getVelocity().X, getVelocity().Y * (-1)));
 			}
 
-			if (getPosition().Y + getVelocity().Y < 0 + _data.radius)
+			if (getPosition().Y + getVelocity().Y * ballData.getElapsedTimeInSeconds() < 0 + _data.radius)
 			{
 				setVelocity(new Vector2(getVelocity().X, getVelocity().Y * (-1)));
 			}
 		}
-		
-		private void handleCollisionsWithBalls()
+
+		public float getElapsedTimeInSeconds()
+		{
+			return ballData.getElapsedTimeInSeconds();
+		}
+
+
+        private void handleCollisionsWithBalls()
 		{
 			lock(otherBalls)
 			{
 				for (int i = 0; i < otherBalls.Count; i++)
 				{
 					if (otherBalls[i] == this) { continue; }
-					float distance = Vector2.Distance(getPosition() + getVelocity(), otherBalls[i].getPosition() + otherBalls[i].getVelocity());
+					float distance = Vector2.Distance(getPosition() + getVelocity() * ballData.getElapsedTimeInSeconds(), otherBalls[i].getPosition() + otherBalls[i].getVelocity() * otherBalls[i].getElapsedTimeInSeconds());
 					if (distance <= _data.radius * 2)
 					{ 
 						Vector2 relativeVelocity = getVelocity() - otherBalls[i].getVelocity();

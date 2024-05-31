@@ -82,7 +82,7 @@ namespace Logic
         private void randomizeSpeed(Ball ball)
         {
             Random random = new Random();
-            ball.setVelocity(new Vector2((float)random.NextDouble() * 6 - 3, (float)random.NextDouble() * 6 - 3));
+            ball.setVelocity(new Vector2((float)random.NextDouble() * 100, (float)random.NextDouble() * 100));
         }
 
         private bool isWithinTable(Vector2 position)

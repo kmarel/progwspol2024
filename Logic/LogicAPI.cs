@@ -16,6 +16,8 @@ namespace Logic
 
         int getRadius();
 
+        float getElapsedTimeInSeconds();
+
     }
 
     public abstract class LogicAPI

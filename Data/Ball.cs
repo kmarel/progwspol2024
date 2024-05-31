@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Data
@@ -15,6 +17,16 @@ namespace Data
         private int weight;
         private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
         private Thread thread;
+        private Stopwatch stopwatch = new Stopwatch();
+        private long previousTimeInMilliseconds = 0;
+        private float elapsedTimeInSeconds = 0;
+        private object velocityLock = new object();
+
+        public float PositionX { get { return position.X; } }
+        public float PositionY { get { return position.Y; } }
+        public float VelocityX { get { return velocity.X; } }
+        public float VelocityY { get { return velocity.Y; } }
+
 
         public Ball(Vector2 position, Vector2 velocity, int radius, int weight)
         {
@@ -40,40 +52,70 @@ namespace Data
             thread.Start();
         }
 
+        public float getElapsedTimeInSeconds()
+        {
+            return elapsedTimeInSeconds;
+        }
+
         public Vector2 getPosition()
         {
-            lock (this)
+            lock(this)
             {
                 return position;
             }
         }
-
+        
         private void setPosition(Vector2 newPosition)
         {
-            position = newPosition;
+            lock(this)
+            {
+                position = newPosition;
+            }
         }
 
         public Vector2 getVelocity()
         {
-            return velocity;
+            lock(velocityLock)
+            {
+                return velocity;
+            }
         }
 
         public void setVelocity(Vector2 newVelocity)
         {
-            velocity = newVelocity;
+            lock(velocityLock)
+            {
+                velocity = newVelocity;
+            }
         }
-
+        
         private void move()
         {
-            while(true)
-            {   
-                Vector2 newPosition = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            stopwatch.Start();
+
+
+            string fileName = "WeatherForecast.json";
+            string jsonString = JsonSerializer.Serialize(this);
+            File.WriteAllText(fileName, jsonString);
+
+
+
+            while (true)
+            {
+                long timeSampleInMilliseconds = stopwatch.ElapsedMilliseconds;
+                elapsedTimeInSeconds = (float)(timeSampleInMilliseconds - previousTimeInMilliseconds) / 1000;
+                previousTimeInMilliseconds = timeSampleInMilliseconds;
+
+                // Zakladamy, ze velocity to okreslone przemieszczenie na sekunde
+                Vector2 newPosition = new Vector2(position.X + velocity.X * elapsedTimeInSeconds, 
+                                                  position.Y + velocity.Y * elapsedTimeInSeconds);
+
                 setPosition(newPosition);
                 foreach (IObserver<Vector2> observer in observers)
                 {
                     observer.OnNext(position);
                 }
-                Thread.Sleep(16);   
+                Thread.Sleep(16);
             }
         }
 
