@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Data
 {
@@ -8,6 +9,12 @@ namespace Data
         Vector2 getVelocity();
         void setVelocity(Vector2 newVelocity);
         float getElapsedTimeInSeconds();
+
+        public float PositionX { get; }
+        public float PositionY { get; }
+        public float VelocityX { get; }
+        public float VelocityY { get; }
+        public string GUID { get; }
     }
     public abstract class DataAPI
     {

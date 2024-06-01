@@ -21,11 +21,14 @@ namespace Data
         private long previousTimeInMilliseconds = 0;
         private float elapsedTimeInSeconds = 0;
         private object velocityLock = new object();
+        private Logger logger = Logger.getInstance();
+        private string guid = Guid.NewGuid().ToString();
 
         public float PositionX { get { return position.X; } }
         public float PositionY { get { return position.Y; } }
         public float VelocityX { get { return velocity.X; } }
         public float VelocityY { get { return velocity.Y; } }
+        public string GUID { get { return guid; } }
 
 
         public Ball(Vector2 position, Vector2 velocity, int radius, int weight)
@@ -93,24 +96,19 @@ namespace Data
         {
             stopwatch.Start();
 
-
-            string fileName = "WeatherForecast.json";
-            string jsonString = JsonSerializer.Serialize(this);
-            File.WriteAllText(fileName, jsonString);
-
-
-
             while (true)
             {
                 long timeSampleInMilliseconds = stopwatch.ElapsedMilliseconds;
                 elapsedTimeInSeconds = (float)(timeSampleInMilliseconds - previousTimeInMilliseconds) / 1000;
                 previousTimeInMilliseconds = timeSampleInMilliseconds;
 
-                // Zakladamy, ze velocity to okreslone przemieszczenie na sekunde
                 Vector2 newPosition = new Vector2(position.X + velocity.X * elapsedTimeInSeconds, 
                                                   position.Y + velocity.Y * elapsedTimeInSeconds);
 
                 setPosition(newPosition);
+
+                logger.log(this);
+
                 foreach (IObserver<Vector2> observer in observers)
                 {
                     observer.OnNext(position);
