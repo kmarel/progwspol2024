@@ -13,7 +13,7 @@ namespace Data
     {
 
         private static Logger? instance;
-        private CancellationTokenSource state = new CancellationTokenSource();
+        private Thread thread;
 
         private ConcurrentQueue<IBall> ballsQueue;
         private int bufferSize = 32;
@@ -21,7 +21,9 @@ namespace Data
         private Logger() 
         {
             ballsQueue = new ConcurrentQueue<IBall>();
-            Task.Run(logToFile);
+            thread = new Thread(logToFile);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public static Logger getInstance()
@@ -38,11 +40,10 @@ namespace Data
             if(ballsQueue.Count < bufferSize)
             {
                 ballsQueue.Enqueue(ballToLog);
-                state.Cancel();
             }
         }
 
-        private async void logToFile()
+        private void logToFile()
         {
             while(true)
             {
@@ -51,17 +52,13 @@ namespace Data
                     string fileName = "Derulo.json";
                     string timestamp = DateTime.Now.ToString("HH:mm:ss");
                     string jsonString = JsonSerializer.Serialize(ball);
-                    string log = timestamp + ":" + jsonString + "\n";
-                    await File.AppendAllTextAsync(fileName, log);
-                }
-                await Task.Delay(Timeout.Infinite, state.Token).ContinueWith(_ => { });
-
-                if (this.state.IsCancellationRequested)
-                {
-                    this.state = new CancellationTokenSource();
+                    string logLine = "[" + timestamp + "]: " + jsonString;
+                    using (StreamWriter logFile = new StreamWriter(fileName, true))
+                    {
+                        logFile.WriteLine(logLine);
+                    }
                 }
             }
         }
-
     }
 }
