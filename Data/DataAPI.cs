@@ -9,13 +9,9 @@ namespace Data
         Vector2 getVelocity();
         void setVelocity(Vector2 newVelocity);
         float getElapsedTimeInSeconds();
-
-        public float PositionX { get; }
-        public float PositionY { get; }
-        public float VelocityX { get; }
-        public float VelocityY { get; }
-        public string GUID { get; }
+        string getGUID();
     }
+
     public abstract class DataAPI
     {
         public abstract int radius { get; }

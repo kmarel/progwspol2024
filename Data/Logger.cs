@@ -11,35 +11,45 @@ namespace Data
 {
     internal class Logger
     {
-
-        private static Logger? instance;
         private Thread thread;
 
-        private ConcurrentQueue<IBall> ballsQueue;
+        private ConcurrentQueue<BallAndTime> ballsQueue;
         private int bufferSize = 32;
+
+        private StreamWriter logFile;
+
+        private AutoResetEvent logEvent = new AutoResetEvent(false);
+
+        private static readonly Lazy<Logger> instance = new Lazy<Logger>(() => new Logger());
 
         private Logger() 
         {
-            ballsQueue = new ConcurrentQueue<IBall>();
+            ballsQueue = new ConcurrentQueue<BallAndTime>();
             thread = new Thread(logToFile);
             thread.IsBackground = true;
             thread.Start();
+            logFile = new StreamWriter("Derulo.json", false, Encoding.UTF8);
+        }
+
+        ~Logger() 
+        {
+            logFile.Close();
         }
 
         public static Logger getInstance()
         {
-            if (instance == null)
-            {
-                instance = new Logger();
-            }
-            return instance;
+            return instance.Value;
         }
 
-        public void log(IBall ballToLog)
+        public void log(BallAndTime ballAndTime)
         {
-            if(ballsQueue.Count < bufferSize)
+            lock(this)
             {
-                ballsQueue.Enqueue(ballToLog);
+                if (ballsQueue.Count < bufferSize)
+                {
+                    ballsQueue.Enqueue(ballAndTime);
+                    logEvent.Set();
+                }
             }
         }
 
@@ -47,16 +57,12 @@ namespace Data
         {
             while(true)
             {
-                while(ballsQueue.TryDequeue(out IBall? ball))
+                logEvent.WaitOne();
+                while (ballsQueue.TryDequeue(out BallAndTime? ballAndTime))
                 {
-                    string fileName = "Derulo.json";
-                    string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                    string jsonString = JsonSerializer.Serialize(ball);
-                    string logLine = "[" + timestamp + "]: " + jsonString;
-                    using (StreamWriter logFile = new StreamWriter(fileName, true))
-                    {
-                        logFile.WriteLine(logLine);
-                    }
+                    string jsonString = JsonSerializer.Serialize(ballAndTime);
+                    logFile.WriteLine(jsonString);
+                    logFile.Flush();
                 }
             }
         }

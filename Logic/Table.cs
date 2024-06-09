@@ -54,7 +54,7 @@ namespace Logic
         {
             foreach (Ball ball in balls)
             {
-                if (Vector2.Distance(ball.getPosition() + ball.getVelocity(), position) <= 2 * _data.radius + 5)
+                if (Vector2.Distance(ball.getPosition() + ball.getVelocity() * ball.getElapsedTimeInSeconds(), position) <= 2 * _data.radius + 5)
                 {
                     return true;
                 }

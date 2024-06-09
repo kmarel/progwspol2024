@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Data
 {
+    internal record BallAndTime(float positionX, float positionY, float velocityX, float velocityY,
+        string guid, string timestamp);
+
     internal class Ball : IBall
     {
         private Vector2 position;
@@ -21,15 +24,8 @@ namespace Data
         private long previousTimeInMilliseconds = 0;
         private float elapsedTimeInSeconds = 0;
         private object velocityLock = new object();
-        private Logger logger = Logger.getInstance();
+        private readonly Logger logger = Logger.getInstance();
         private string guid = Guid.NewGuid().ToString();
-
-        public float PositionX { get { return position.X; } }
-        public float PositionY { get { return position.Y; } }
-        public float VelocityX { get { return velocity.X; } }
-        public float VelocityY { get { return velocity.Y; } }
-        public string GUID { get { return guid; } }
-
 
         public Ball(Vector2 position, Vector2 velocity, int radius, int weight)
         {
@@ -91,6 +87,11 @@ namespace Data
                 velocity = newVelocity;
             }
         }
+
+        public string getGUID()
+        {
+            return guid;
+        }
         
         private void move()
         {
@@ -107,7 +108,10 @@ namespace Data
 
                 setPosition(newPosition);
 
-                logger.log(this);
+                BallAndTime ballAndTime = new BallAndTime(getPosition().X,
+                    getPosition().Y, getVelocity().X, getVelocity().Y,
+                    getGUID(), DateTime.Now.ToString("HH:mm:ss"));
+                logger.log(ballAndTime);
 
                 foreach (IObserver<Vector2> observer in observers)
                 {
